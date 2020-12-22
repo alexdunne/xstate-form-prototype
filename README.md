@@ -1,4 +1,4 @@
-## xform
+## xstate-form-prototype
 
 ## Form machine
 
@@ -10,13 +10,12 @@
 
 ## Field machine
 
-- [] value
-- [] touched
-- [] error
+- [x] value
+- [x] touched
+- [x] error
 - [] visible
-- [] changed events
-- [] focused events
-- [] blured events
+- [x] changed events
+- [x] blured events
 - [] validation
 
 ## Field types
@@ -27,7 +26,6 @@
 - [] boolean
 - [] radio
 - [] checkbox
-- [] email
 
 ## Field settings
 
@@ -42,3 +40,4 @@
 - [] section visibility
 - [] page visibility
 - [] required when another value is X
+- [] value middleare
