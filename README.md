@@ -1,4 +1,8 @@
-## xstate-form-prototype
+# xstate-form-prototype
+
+This project is an experiment into using xstate to drive dynamic forms. [Chakra UI](https://chakra-ui.com/) is used as base component library.
+
+Part of the experiment is to see how much we can derive from a simple json object (possibly serializable).
 
 ## Form machine
 
@@ -40,4 +44,4 @@
 - [] section visibility
 - [] page visibility
 - [] required when another value is X
-- [] value middleare
+- [] value middleware (update the value with a prefix/suffix for example)

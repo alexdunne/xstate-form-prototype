@@ -7,14 +7,13 @@ inspect({
   iframe: false,
 });
 
-const FORM_CONFIG = {
+const formConfig = {
   fields: [
-    { name: "firstName", type: "text" },
-    { name: "surname", type: "text" },
-    { name: "age", type: "number" },
+    { name: "name", type: "text" as const, label: "Name" },
+    { name: "age", type: "number" as const, label: "Age" },
   ],
 };
 
 export default function App() {
-  return <Form form={FORM_CONFIG} />;
+  return <Form form={formConfig} />;
 }

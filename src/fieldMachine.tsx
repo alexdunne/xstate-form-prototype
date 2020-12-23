@@ -2,10 +2,20 @@ import { ActorRefFrom, createMachine, assign } from "xstate";
 
 import { assertEventType } from "./machine-utils";
 
+type FieldType = "text" | "number";
+
+export interface FieldConfig {
+  name: string;
+  type: FieldType;
+  label: string;
+  placeholder?: string;
+  helperText?: string;
+}
+
 type FieldValue = TSFixMe;
 
 interface FieldMachineContext {
-  name: string;
+  field: FieldConfig;
   value: FieldValue;
   touched: boolean;
   error?: string;
@@ -25,20 +35,20 @@ export type FieldMachineEvent =
       type: "BLUR";
     };
 
-type FieldMachineState = any;
+type FieldMachineState = TSFixMe;
 
 export type FieldActor = ActorRefFrom<ReturnType<typeof createFieldMachine>>;
 
-interface CreateFieldMachineOptions {
-  fieldName: string;
-}
-
-export const createFieldMachine = ({ fieldName }: CreateFieldMachineOptions) => {
-  return createMachine<FieldMachineContext, FieldMachineEvent, FieldMachineState>(
+export const createFieldMachine = (config: FieldConfig) => {
+  return createMachine<
+    FieldMachineContext,
+    FieldMachineEvent,
+    FieldMachineState
+  >(
     {
-      id: fieldName,
+      id: config.name,
       context: {
-        name: fieldName,
+        field: config,
         value: "",
         touched: false,
         error: undefined,
@@ -51,15 +61,15 @@ export const createFieldMachine = ({ fieldName }: CreateFieldMachineOptions) => 
             idle: {},
             invalid: {},
             validating: {
+              entry: ["resetError"],
               always: [
                 {
                   cond: { type: "isValid" },
                   target: "idle",
-                  actions: ["changeValue", "clearError"],
                 },
                 {
                   target: "invalid",
-                  actions: ["changeValue", "setErrorMessage"],
+                  actions: ["setValidationError"],
                 },
               ],
             },
@@ -67,9 +77,11 @@ export const createFieldMachine = ({ fieldName }: CreateFieldMachineOptions) => 
           on: {
             CHANGE: {
               target: ".validating",
+              actions: ["cacheValue"],
             },
+            FOCUS: {},
             BLUR: {
-              target: ".idle",
+              target: ".validating",
               actions: "markAsTouched",
             },
           },
@@ -78,7 +90,7 @@ export const createFieldMachine = ({ fieldName }: CreateFieldMachineOptions) => 
     },
     {
       actions: {
-        changeValue: assign({
+        cacheValue: assign({
           value: (ctx, ev) => {
             assertEventType(ev, "CHANGE");
 
@@ -92,12 +104,12 @@ export const createFieldMachine = ({ fieldName }: CreateFieldMachineOptions) => 
             return true;
           },
         }),
-        clearError: assign({
+        resetError: assign({
           error: (ctx, ev) => {
             return undefined;
           },
         }),
-        setError: assign({
+        setValidationError: assign({
           error: (ctx, ev) => {
             return "";
           },
@@ -105,13 +117,14 @@ export const createFieldMachine = ({ fieldName }: CreateFieldMachineOptions) => 
       },
       guards: {
         isValid: (ctx, ev) => {
-          if (ctx.touched) {
+          if (!ctx.touched) {
             return true;
           }
-
           // TODO - do validation
 
-          return true;
+          return ctx.value.length <= 4;
+
+          // return true;
         },
       },
     }

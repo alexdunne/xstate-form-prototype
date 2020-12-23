@@ -1,33 +1,25 @@
 import { assign, createMachine, spawn } from "xstate";
 
-import { createFieldMachine, FieldActor } from "./fieldMachine";
-
-interface FieldConfig {
-  name: string;
-  type: string;
-}
+import { createFieldMachine, FieldActor, FieldConfig } from "./fieldMachine";
 
 export interface FormConfig {
   fields: FieldConfig[];
 }
 
 interface FormMachineContext {
-  config: {
-    fields: FieldConfig[];
-  };
+  config: FormConfig;
   fields: FieldActor[];
 }
 
-type FormMachineEvent = {
-  type: "INITIALISE";
-  data: {
-    fields: FieldConfig[];
-  };
-};
+type FormMachineEvent = TSFixMe;
 
-type FormMachineState = any;
+type FormMachineState = TSFixMe;
 
-export const formMachine = createMachine<FormMachineContext, FormMachineEvent, FormMachineState>(
+export const formMachine = createMachine<
+  FormMachineContext,
+  FormMachineEvent,
+  FormMachineState
+>(
   {
     id: "form",
     context: {
@@ -52,9 +44,7 @@ export const formMachine = createMachine<FormMachineContext, FormMachineEvent, F
       initialiseFields: assign({
         fields: (ctx) => {
           return ctx.config.fields.map((field) => {
-            const { name } = field;
-
-            return spawn(createFieldMachine({ fieldName: name }), name);
+            return spawn(createFieldMachine(field), field.name);
           });
         },
       }),
