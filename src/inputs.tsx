@@ -1,13 +1,13 @@
 import React from "react";
 
-interface FormControlProps {
+export interface FormControlProps {
   label: React.ReactNode;
   labelFor: string;
   helperText?: React.ReactNode;
   error?: React.ReactNode;
 }
 
-const FormControl: React.FC<FormControlProps> = ({ label, labelFor, helperText, error, children }) => {
+export const FormControl: React.FC<FormControlProps> = ({ label, labelFor, helperText, error, children }) => {
   return (
     <div>
       {label ? <label htmlFor={labelFor}>{label}</label> : null}
@@ -18,47 +18,68 @@ const FormControl: React.FC<FormControlProps> = ({ label, labelFor, helperText, 
   );
 };
 
-interface TextInputProps {
+export interface TextInputProps {
   id: string;
   name: string;
   value: string;
   placeholder?: string;
-  onChange: React.ChangeEventHandler<HTMLInputElement>;
+  onChange: (value: string) => void;
   onFocus: React.FocusEventHandler<HTMLInputElement>;
   onBlur: React.FocusEventHandler<HTMLInputElement>;
 }
 
-const TextInput: React.FC<TextInputProps> = (props) => {
-  return <input {...props} type="text" />;
+export const TextInput: React.FC<TextInputProps> = (props) => {
+  return (
+    <input
+      {...props}
+      type="text"
+      onChange={(e) => {
+        props.onChange(e.target.value);
+      }}
+    />
+  );
 };
 
-interface TextareaProps {
+export interface TextareaProps {
   id: string;
   name: string;
   value: string;
   placeholder?: string;
-  onChange: React.ChangeEventHandler<HTMLTextAreaElement>;
+  onChange: (value: string) => void;
   onFocus: React.FocusEventHandler<HTMLTextAreaElement>;
   onBlur: React.FocusEventHandler<HTMLTextAreaElement>;
 }
 
-const Textarea: React.FC<TextareaProps> = (props) => {
-  return <textarea {...props} rows={3} />;
+export const Textarea: React.FC<TextareaProps> = (props) => {
+  return (
+    <textarea
+      {...props}
+      rows={3}
+      onChange={(e) => {
+        props.onChange(e.target.value);
+      }}
+    />
+  );
 };
 
-interface NumberInputProps {
+export interface NumberInputProps {
   id: string;
   name: string;
-  type: string;
   value: string;
   placeholder?: string;
-  onChange: React.ChangeEventHandler<HTMLInputElement>;
+  onChange: (value: string) => void;
   onFocus: React.FocusEventHandler<HTMLInputElement>;
   onBlur: React.FocusEventHandler<HTMLInputElement>;
 }
 
-const NumberInput: React.FC<NumberInputProps> = (props) => {
-  return <input {...props} type="number" />;
+export const NumberInput: React.FC<NumberInputProps> = (props) => {
+  return (
+    <input
+      {...props}
+      type="number"
+      onChange={(e) => {
+        props.onChange(e.target.value);
+      }}
+    />
+  );
 };
-
-export { FormControl, TextInput, Textarea, NumberInput };

@@ -5,7 +5,10 @@ import { Field } from "./Field";
 import { formMachine, FormConfig } from "./formMachine";
 import { FormControl, TextInput, Textarea, NumberInput } from "./inputs";
 
+const Page: React.FC<any> = ({ children }) => children;
+
 export const defaultComponents = {
+  Page,
   FormControl,
   TextInput,
   Textarea,
@@ -32,10 +35,10 @@ export const Form: React.FC<FormProps> = ({ form, components = defaultComponents
   const { fields } = current.context;
 
   return (
-    <div>
+    <components.Page>
       {fields.map((field) => {
         return <Field key={field.id} service={field} components={components} />;
       })}
-    </div>
+    </components.Page>
   );
 };

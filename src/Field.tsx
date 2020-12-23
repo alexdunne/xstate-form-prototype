@@ -21,8 +21,8 @@ export const Field: React.FC<FieldProps> = ({ components, service }) => {
           {...field}
           id={field.name}
           value={value}
-          onChange={(e) => {
-            send({ type: "CHANGE", data: { value: e.target.value } });
+          onChange={(value) => {
+            send({ type: "CHANGE", data: { value } });
           }}
           onFocus={() => {
             send({ type: "FOCUS" });
@@ -36,8 +36,8 @@ export const Field: React.FC<FieldProps> = ({ components, service }) => {
           {...field}
           id={field.name}
           value={value}
-          onChange={(e) => {
-            send({ type: "CHANGE", data: { value: e.target.value } });
+          onChange={(value) => {
+            send({ type: "CHANGE", data: { value } });
           }}
           onFocus={() => {
             send({ type: "FOCUS" });
@@ -51,8 +51,8 @@ export const Field: React.FC<FieldProps> = ({ components, service }) => {
           {...field}
           id={field.name}
           value={value}
-          onChange={(e) => {
-            send({ type: "CHANGE", data: { value: e.target.value } });
+          onChange={(value) => {
+            send({ type: "CHANGE", data: { value } });
           }}
           onFocus={() => {
             send({ type: "FOCUS" });
