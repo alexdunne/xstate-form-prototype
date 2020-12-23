@@ -31,18 +31,17 @@ Part of the experiment is to see how much we can derive from a simple json objec
 
 ## Field types
 
-- [] short answer (text input)
-- [] long answer (textarea)
-- [] number
-- [] boolean
+- [x] short answer (text input)
+- [x] long answer (textarea)
+- [] number (standard via `type=number` and show replacing with [Chakra UI Number Input](https://chakra-ui.com/docs/form/number-input))
+- [] boolean (default checkbox and show dropdown with Y/N)
 - [] radio
-- [] checkbox
 
 ## Field settings
 
-- [] title/question
-- [] helper text
-- [] placeholder
+- [x] title/question
+- [x] helper text
+- [x] placeholder
 - [] default value
 
 ## Points to consider
@@ -50,5 +49,5 @@ Part of the experiment is to see how much we can derive from a simple json objec
 - [] field visibility
 - [] section visibility
 - [] page visibility
-- [] required when another value is X
-- [] value middleware (update the value with a prefix/suffix for example)
+- [] required when another value is X (dependent fields)
+- [] value middleware (e.g. update the value with a prefix/suffix)

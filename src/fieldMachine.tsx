@@ -59,11 +59,11 @@ export const createFieldMachine = (config: FieldConfig) => {
             idle: {},
             invalid: {},
             validating: {
-              entry: ["resetError"],
               always: [
                 {
                   cond: { type: "isValid" },
                   target: "idle",
+                  actions: ["resetError"],
                 },
                 {
                   target: "invalid",
@@ -109,7 +109,7 @@ export const createFieldMachine = (config: FieldConfig) => {
         }),
         setValidationError: assign({
           error: (ctx, ev) => {
-            return "";
+            return "Field is invalid";
           },
         }),
       },
