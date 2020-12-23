@@ -1,23 +1,21 @@
 import { useActor } from "@xstate/react";
 import React from "react";
-import { FieldActor } from "./fieldMachine";
-import { TextInput } from "./inputs";
 
-const components = {
-  TextInput: TextInput,
-};
+import { FieldActor } from "./fieldMachine";
+import { Components } from "./Form";
 
 interface FieldProps {
+  components: Components;
   service: FieldActor;
 }
 
-export const Field: React.FC<FieldProps> = ({ service }) => {
+export const Field: React.FC<FieldProps> = ({ components, service }) => {
   const [state, send] = useActor(service);
 
-  const { field, value } = state.context;
+  const { field, error, value } = state.context;
 
   return (
-    <React.Fragment>
+    <components.FormControl labelFor={field.name} label={field.label} helperText={field.helperText} error={error}>
       {field.type === "text" ? (
         <components.TextInput
           {...field}
@@ -26,14 +24,29 @@ export const Field: React.FC<FieldProps> = ({ service }) => {
           onChange={(e) => {
             send({ type: "CHANGE", data: { value: e.target.value } });
           }}
-          onFocus={(event) => {
+          onFocus={() => {
             send({ type: "FOCUS" });
           }}
-          onBlur={(event) => {
+          onBlur={() => {
+            send({ type: "BLUR" });
+          }}
+        />
+      ) : field.type === "textarea" ? (
+        <components.Textarea
+          {...field}
+          id={field.name}
+          value={value}
+          onChange={(e) => {
+            send({ type: "CHANGE", data: { value: e.target.value } });
+          }}
+          onFocus={() => {
+            send({ type: "FOCUS" });
+          }}
+          onBlur={() => {
             send({ type: "BLUR" });
           }}
         />
       ) : null}
-    </React.Fragment>
+    </components.FormControl>
   );
 };

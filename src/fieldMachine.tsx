@@ -1,8 +1,8 @@
-import { ActorRefFrom, createMachine, assign } from "xstate";
+import { ActorRefFrom, createMachine, assign, Interpreter } from "xstate";
 
 import { assertEventType } from "./machine-utils";
 
-type FieldType = "text" | "number";
+type FieldType = "text" | "textarea";
 
 export interface FieldConfig {
   name: string;
@@ -37,14 +37,12 @@ export type FieldMachineEvent =
 
 type FieldMachineState = TSFixMe;
 
-export type FieldActor = ActorRefFrom<ReturnType<typeof createFieldMachine>>;
+export type FieldService = Interpreter<FieldMachineContext, any, FieldMachineEvent>["machine"];
+
+export type FieldActor = ActorRefFrom<FieldService>;
 
 export const createFieldMachine = (config: FieldConfig) => {
-  return createMachine<
-    FieldMachineContext,
-    FieldMachineEvent,
-    FieldMachineState
-  >(
+  return createMachine<FieldMachineContext, FieldMachineEvent, FieldMachineState>(
     {
       id: config.name,
       context: {

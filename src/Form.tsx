@@ -3,16 +3,26 @@ import React from "react";
 
 import { Field } from "./Field";
 import { formMachine, FormConfig } from "./formMachine";
+import { FormControl, TextInput, Textarea } from "./inputs";
+
+export const defaultComponents = {
+  FormControl,
+  TextInput,
+  Textarea,
+};
+
+export type Components = typeof defaultComponents;
 
 interface FormProps {
   form: FormConfig;
+  components?: Components;
 }
 
-export const Form: React.FC<FormProps> = (props) => {
+export const Form: React.FC<FormProps> = ({ form, components = defaultComponents }) => {
   const [current] = useMachine(formMachine, {
     context: {
       config: {
-        fields: props.form.fields,
+        fields: form.fields,
       },
     },
     devTools: true,
@@ -23,7 +33,7 @@ export const Form: React.FC<FormProps> = (props) => {
   return (
     <div>
       {fields.map((field) => {
-        return <Field key={field.id} service={field} />;
+        return <Field key={field.id} service={field} components={components} />;
       })}
     </div>
   );

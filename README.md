@@ -1,8 +1,15 @@
 # xstate-form-prototype
 
-This project is an experiment into using xstate to drive dynamic forms. [Chakra UI](https://chakra-ui.com/) is used as base component library.
+This project is an experiment into using xstate to drive dynamic forms.
 
 Part of the experiment is to see how much we can derive from a simple json object (possibly serializable).
+
+## Inspiration
+
+- [Formik](https://formik.org/)
+- [Formium](https://formium.io/)
+- [React Hook Form](https://react-hook-form.com/)
+- [Chakra UI](https://chakra-ui.com/)
 
 ## Form machine
 
