@@ -2,7 +2,7 @@ import { ActorRefFrom, createMachine, assign, Interpreter } from "xstate";
 
 import { assertEventType } from "./machine-utils";
 
-type FieldType = "text" | "textarea";
+type FieldType = "text" | "textarea" | "number";
 
 export interface FieldConfig {
   name: string;

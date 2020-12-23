@@ -21,7 +21,6 @@ const FormControl: React.FC<FormControlProps> = ({ label, labelFor, helperText, 
 interface TextInputProps {
   id: string;
   name: string;
-  type: string;
   value: string;
   placeholder?: string;
   onChange: React.ChangeEventHandler<HTMLInputElement>;
@@ -30,7 +29,7 @@ interface TextInputProps {
 }
 
 const TextInput: React.FC<TextInputProps> = (props) => {
-  return <input {...props} />;
+  return <input {...props} type="text" />;
 };
 
 interface TextareaProps {
@@ -47,4 +46,19 @@ const Textarea: React.FC<TextareaProps> = (props) => {
   return <textarea {...props} rows={3} />;
 };
 
-export { FormControl, TextInput, Textarea };
+interface NumberInputProps {
+  id: string;
+  name: string;
+  type: string;
+  value: string;
+  placeholder?: string;
+  onChange: React.ChangeEventHandler<HTMLInputElement>;
+  onFocus: React.FocusEventHandler<HTMLInputElement>;
+  onBlur: React.FocusEventHandler<HTMLInputElement>;
+}
+
+const NumberInput: React.FC<NumberInputProps> = (props) => {
+  return <input {...props} type="number" />;
+};
+
+export { FormControl, TextInput, Textarea, NumberInput };

@@ -3,12 +3,13 @@ import React from "react";
 
 import { Field } from "./Field";
 import { formMachine, FormConfig } from "./formMachine";
-import { FormControl, TextInput, Textarea } from "./inputs";
+import { FormControl, TextInput, Textarea, NumberInput } from "./inputs";
 
 export const defaultComponents = {
   FormControl,
   TextInput,
   Textarea,
+  NumberInput,
 };
 
 export type Components = typeof defaultComponents;

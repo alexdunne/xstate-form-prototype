@@ -46,6 +46,21 @@ export const Field: React.FC<FieldProps> = ({ components, service }) => {
             send({ type: "BLUR" });
           }}
         />
+      ) : field.type === "number" ? (
+        <components.NumberInput
+          {...field}
+          id={field.name}
+          value={value}
+          onChange={(e) => {
+            send({ type: "CHANGE", data: { value: e.target.value } });
+          }}
+          onFocus={() => {
+            send({ type: "FOCUS" });
+          }}
+          onBlur={() => {
+            send({ type: "BLUR" });
+          }}
+        />
       ) : null}
     </components.FormControl>
   );

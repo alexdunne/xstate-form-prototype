@@ -36,6 +36,7 @@ Part of the experiment is to see how much we can derive from a simple json objec
 - [] number (standard via `type=number` and show replacing with [Chakra UI Number Input](https://chakra-ui.com/docs/form/number-input))
 - [] boolean (default checkbox and show dropdown with Y/N)
 - [] radio
+- [] multiple short/long (min/max)
 
 ## Field settings
 
