@@ -1,9 +1,9 @@
 import { assign, createMachine, spawn } from "xstate";
 
-import { createFieldMachine, FieldActor, FieldConfig } from "./fieldMachine";
+import { createFieldMachine, FieldActor, FieldMachineConfig } from "./fieldMachine";
 
 export interface FormConfig {
-  fields: FieldConfig[];
+  fields: FieldMachineConfig[];
 }
 
 interface FormMachineContext {
@@ -15,11 +15,7 @@ type FormMachineEvent = TSFixMe;
 
 type FormMachineState = TSFixMe;
 
-export const formMachine = createMachine<
-  FormMachineContext,
-  FormMachineEvent,
-  FormMachineState
->(
+export const formMachine = createMachine<FormMachineContext, FormMachineEvent, FormMachineState>(
   {
     id: "form",
     context: {

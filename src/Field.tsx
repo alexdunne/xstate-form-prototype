@@ -12,15 +12,14 @@ interface FieldProps {
 export const Field: React.FC<FieldProps> = ({ components, service }) => {
   const [state, send] = useActor(service);
 
-  const { field, error, value } = state.context;
+  const { field, meta, label, helperText } = state.context;
 
   return (
-    <components.FormControl labelFor={field.name} label={field.label} helperText={field.helperText} error={error}>
+    <components.FormControl labelFor={field.name} label={label} helperText={helperText} error={meta.error}>
       {field.type === "text" ? (
         <components.TextInput
           {...field}
           id={field.name}
-          value={value}
           onChange={(value) => {
             send({ type: "CHANGE", data: { value } });
           }}
@@ -35,7 +34,6 @@ export const Field: React.FC<FieldProps> = ({ components, service }) => {
         <components.Textarea
           {...field}
           id={field.name}
-          value={value}
           onChange={(value) => {
             send({ type: "CHANGE", data: { value } });
           }}
@@ -50,7 +48,6 @@ export const Field: React.FC<FieldProps> = ({ components, service }) => {
         <components.NumberInput
           {...field}
           id={field.name}
-          value={value}
           onChange={(value) => {
             send({ type: "CHANGE", data: { value } });
           }}

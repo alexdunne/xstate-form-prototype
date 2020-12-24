@@ -4,21 +4,34 @@ import { assertEventType } from "./machine-utils";
 
 type FieldType = "text" | "textarea" | "number";
 
-export interface FieldConfig {
+type FieldValue = TSFixMe;
+
+export interface FieldMachineConfig {
   name: string;
   type: FieldType;
   label: string;
   placeholder?: string;
   helperText?: string;
+  defaultValue?: FieldValue;
 }
 
-type FieldValue = TSFixMe;
+export interface FieldConfig {
+  name: string;
+  type: FieldType;
+  value: FieldValue;
+  placeholder?: string;
+}
+
+export interface FieldMeta {
+  touched: boolean;
+  error?: string;
+}
 
 interface FieldMachineContext {
   field: FieldConfig;
-  value: FieldValue;
-  touched: boolean;
-  error?: string;
+  meta: FieldMeta;
+  label: string;
+  helperText?: string;
 }
 
 export type FieldMachineEvent =
@@ -41,15 +54,23 @@ export type FieldService = Interpreter<FieldMachineContext, any, FieldMachineEve
 
 export type FieldActor = ActorRefFrom<FieldService>;
 
-export const createFieldMachine = (config: FieldConfig) => {
+export const createFieldMachine = (config: FieldMachineConfig) => {
   return createMachine<FieldMachineContext, FieldMachineEvent, FieldMachineState>(
     {
       id: config.name,
       context: {
-        field: config,
-        value: "",
-        touched: false,
-        error: undefined,
+        field: {
+          name: config.name,
+          type: config.type,
+          value: config.defaultValue ?? "",
+          placeholder: config.placeholder,
+        },
+        meta: {
+          touched: false,
+          error: undefined,
+        },
+        label: config.label,
+        helperText: config.helperText,
       },
       initial: "editing",
       states: {
@@ -89,38 +110,50 @@ export const createFieldMachine = (config: FieldConfig) => {
     {
       actions: {
         cacheValue: assign({
-          value: (ctx, ev) => {
+          field: (ctx, ev) => {
             assertEventType(ev, "CHANGE");
 
-            return ev.data.value;
+            return {
+              ...ctx.field,
+              value: ev.data.value,
+            };
           },
         }),
         markAsTouched: assign({
-          touched: (ctx, ev) => {
+          meta: (ctx, ev) => {
             assertEventType(ev, "BLUR");
 
-            return true;
+            return {
+              ...ctx.meta,
+              touched: true,
+            };
           },
         }),
         resetError: assign({
-          error: (ctx, ev) => {
-            return undefined;
+          meta: (ctx, ev) => {
+            return {
+              ...ctx.meta,
+              error: undefined,
+            };
           },
         }),
         setValidationError: assign({
-          error: (ctx, ev) => {
-            return "Field is invalid";
+          meta: (ctx, ev) => {
+            return {
+              ...ctx.meta,
+              error: "Field is invalid",
+            };
           },
         }),
       },
       guards: {
         isValid: (ctx, ev) => {
-          if (!ctx.touched) {
+          if (!ctx.meta.touched) {
             return true;
           }
           // TODO - do validation
 
-          return ctx.value.length <= 4;
+          return ctx.field.value.length <= 4;
 
           // return true;
         },
