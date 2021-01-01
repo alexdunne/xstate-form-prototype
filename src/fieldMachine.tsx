@@ -1,10 +1,11 @@
 import { ActorRefFrom, createMachine, assign, Interpreter } from "xstate";
+import { sendParent } from "xstate/lib/actions";
 
 import { assertEventType } from "./machine-utils";
 
 type FieldType = "text" | "textarea" | "number";
 
-type FieldValue = TSFixMe;
+export type FieldValue = TSFixMe;
 
 export interface FieldMachineConfig {
   name: string;
@@ -41,12 +42,10 @@ export type FieldMachineEvent =
         value: FieldValue;
       };
     }
-  | {
-      type: "FOCUS";
-    }
-  | {
-      type: "BLUR";
-    };
+  | { type: "FOCUS" }
+  | { type: "BLUR" }
+  | { type: "FORM.VALIDATE" }
+  | { type: "FORM.VALIDATE_SILENT" };
 
 type FieldMachineState = TSFixMe;
 
@@ -84,11 +83,11 @@ export const createFieldMachine = (config: FieldMachineConfig) => {
                 {
                   cond: { type: "isValid" },
                   target: "idle",
-                  actions: ["resetError"],
+                  actions: ["resetError", "sendParentValidSnapshot"],
                 },
                 {
                   target: "invalid",
-                  actions: ["setValidationError"],
+                  actions: ["setValidationError", "sendParentInvalidSnapshot"],
                 },
               ],
             },
@@ -106,6 +105,15 @@ export const createFieldMachine = (config: FieldMachineConfig) => {
           },
         },
       },
+      on: {
+        "FORM.VALIDATE": {
+          actions: ["markAsTouched"],
+          target: "editing.validating",
+        },
+        "FORM.VALIDATE_SILENT": {
+          target: "editing.validating",
+        },
+      },
     },
     {
       actions: {
@@ -121,8 +129,6 @@ export const createFieldMachine = (config: FieldMachineConfig) => {
         }),
         markAsTouched: assign({
           meta: (ctx, ev) => {
-            assertEventType(ev, "BLUR");
-
             return {
               ...ctx.meta,
               touched: true,
@@ -144,6 +150,26 @@ export const createFieldMachine = (config: FieldMachineConfig) => {
               error: "Field is invalid",
             };
           },
+        }),
+        sendParentValidSnapshot: sendParent((ctx, ev) => {
+          return {
+            type: "FIELD.UPDATE",
+            data: {
+              name: ctx.field.name,
+              state: "valid",
+              value: ctx.field.value,
+            },
+          };
+        }),
+        sendParentInvalidSnapshot: sendParent((ctx, ev) => {
+          return {
+            type: "FIELD.UPDATE",
+            data: {
+              name: ctx.field.name,
+              state: "invalid",
+              value: ctx.field.value,
+            },
+          };
         }),
       },
       guards: {

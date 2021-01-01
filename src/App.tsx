@@ -1,5 +1,5 @@
 import { inspect } from "@xstate/inspect";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   ChakraProvider,
   Input,
@@ -25,7 +25,7 @@ const formConfig = {
       type: "text" as const,
       label: "Name",
       helperText: "Your name duh",
-      defaultValue: "Alex",
+      defaultValue: "Alexa",
     },
     { name: "age", type: "number" as const, label: "Age", helperText: "age plz" },
     { name: "description", type: "textarea" as const, label: "Description", helperText: "who r u?" },
@@ -92,9 +92,13 @@ export default function App() {
     setChakraActive((current) => !current);
   };
 
+  const handleSubmit = useCallback(async (values) => {
+    console.log(values);
+  }, []);
+
   return (
     <ChakraProvider resetCSS={isChakraActive}>
-      <Form form={formConfig} components={activeComponents} />
+      <Form form={formConfig} components={activeComponents} enableDebugging={true} onSubmit={handleSubmit} />
     </ChakraProvider>
   );
 }

@@ -15,16 +15,15 @@ Part of the experiment is to see how much we can derive from a simple json objec
 
 - [x] Actors of inputs
 - [x] Hold form config
-- [] Handle input changes
-- [] Control field visibility
+- [x] Handle input changes
 - [] Ask each field if it's valid
+- [] Control field visibility
 
 ## Field machine
 
 - [x] value
 - [x] touched
 - [x] error
-- [] visible
 - [x] changed events
 - [x] blured events
 - [] validation
